@@ -1,6 +1,12 @@
 # fastapi
 fastapi tutorial
 
+# todo
+-[ ] https://wikidocs.net/175950 따라가기
+-[ ] https://github.com/tiangolo/full-stack-fastapi-postgresql 를 참고하여 리팩토링 해보기.
+
+
+# memo
 
 ### 명령어
 ```console
