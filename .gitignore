@@ -237,6 +237,6 @@ fabric.properties
 .idea/caches/build_file_checksums.ser
 
 #alembic
-migrations/
-
-*.db
+app/migrations/
+app/alembic.ini
+app/*.db
