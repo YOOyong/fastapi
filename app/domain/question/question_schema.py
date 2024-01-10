@@ -1,12 +1,11 @@
 import datetime
 from pydantic import BaseModel, field_validator
 
-
 class Question(BaseModel):
     id: int
     subject: str
     content: str
-    created_date: datetime.datetime
+    create_date: datetime.datetime
 
 
 class QuestionCreate(BaseModel):
@@ -18,5 +17,3 @@ class QuestionCreate(BaseModel):
         if not v or not v.strip():
             raise ValueError('빈 값은 허용되지 않습니다.')
         return v
-
-
