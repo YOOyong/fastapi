@@ -24,7 +24,10 @@ class Answer(Base):
     question = relationship("Question", backref="answers") # backref 로 역참조가 가능하게 설정.
 
 
+class User(Base):
+    __tablename__ = "user"
 
-
-
-
+    id = Column(Integer, primary_key=True)
+    username = Column(String, unique=True, nullable=False)
+    password = Column(String, nullable=False)
+    email = Column(String, unique=True, nullable=False)
