@@ -26,6 +26,6 @@ def get_question(question_id: int, db: Session = Depends(get_db)):
     return question
 
 
-@router.post("/create", status_code=status.HTTP_204_NO_CONTENT)
+@router.post("/create", status_code=status.HTTP_201_CREATED)
 def question_create(_question_create: question_schema.QuestionCreate, db: Session = Depends(get_db)):
     question_crud.create_question(db, _question_create)
