@@ -6,7 +6,6 @@ from pydantic_core.core_schema import FieldValidationInfo
 class User(BaseModel):
     id: int
     username: str
-    password: str
     email: EmailStr
 
 

@@ -1,7 +1,9 @@
 from datetime import timedelta, datetime
+
+from dns.dnssectypes import Algorithm
 from fastapi import APIRouter, Depends, HTTPException
-from fastapi.security import OAuth2PasswordRequestForm
-from jose import jwt
+from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
+from jose import jwt, JWTError
 from sqlalchemy.orm import Session
 from starlette import status
 
@@ -10,9 +12,9 @@ from domain.user import user_schema, user_crud
 from domain.user.user_crud import pwd_context
 
 ACCESS_TOKEN_EXPIRE_MINUTES =60 * 24
-SECRETE_KEY = "2178d1691a46a0a5a60181fe6c34c9c496aa6fcaea80ce00c12b69dae1332016"
+SECRET_KEY = "2178d1691a46a0a5a60181fe6c34c9c496aa6fcaea80ce00c12b69dae1332016"
 ALGORITHM = "HS256"
-
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/user/login")
 
 router = APIRouter(
     prefix="/api/user",
@@ -35,7 +37,7 @@ def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(),
         'sub': user.username,
         'exp': datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     }
-    access_token = jwt.encode(data, SECRETE_KEY, algorithm=ALGORITHM)
+    access_token = jwt.encode(data, SECRET_KEY, algorithm=ALGORITHM)
 
     return {
         "access_token": access_token,
@@ -56,3 +58,28 @@ def user_list(db: Session = Depends(get_db)):
     return {
         "user_list": user_list
     }
+
+def get_current_user(token: str = Depends(oauth2_scheme),
+                     db: Session = Depends(get_db)):
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        username: str = payload.get("sub")
+        if username is None:
+            raise credentials_exception
+    except JWTError:
+        raise credentials_exception
+    else:
+        user = user_crud.get_user(db, username=username)
+        if user is None:
+            raise credentials_exception
+        return user
+
+
+
+
+

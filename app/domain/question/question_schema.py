@@ -1,6 +1,7 @@
 import datetime
 from pydantic import BaseModel, field_validator
 from domain.answer.answer_schema import Answer
+from domain.user.user_schema import User
 
 
 # 모델은 db와 1대1 대응
@@ -11,6 +12,7 @@ class Question(BaseModel):
     subject: str
     content: str
     create_date: datetime.datetime
+    user: User | None
     answers: list[Answer] = []  # 모델에서 backref 를 설정했기에 가져오기 가능
 
 

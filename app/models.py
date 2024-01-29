@@ -6,10 +6,12 @@ from database import Base
 class Question(Base):
     __tablename__ = "question"
 
-    id = Column(Integer, primary_key=True,)
+    id = Column(Integer, primary_key=True, )
     subject = Column(String, nullable=False)
     content = Column(Text, nullable=False)
     create_date = Column(DateTime, nullable=False)
+    user_id = Column(Integer, ForeignKey("user.id"), nullable=True)
+    user = relationship("User", backref="question_users")
 
 
 class Answer(Base):
@@ -21,7 +23,9 @@ class Answer(Base):
     question_id = Column(Integer, ForeignKey("question.id"))
     # answer 에서 question 모델을 참조하기 위해 넣은 변수.
     # answer.question.subject 식으로 접근 가능하게 해준다.
-    question = relationship("Question", backref="answers") # backref 로 역참조가 가능하게 설정.
+    question = relationship("Question", backref="answers")  # backref 로 역참조가 가능하게 설정.
+    user_id = Column(Integer, ForeignKey("user.id"), nullable = True)
+    user = relationship("User", backref="answer_users")
 
 
 class User(Base):
