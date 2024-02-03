@@ -21,3 +21,7 @@ uvicorn main:app --reload
 ### 문제점
 `ModuleNotFoundError: No module named 'pydantic_core._pydantic_core'` 에러.
 - 버전문제. 패키지 재설치
+
+### 궁금증
+- [ ] delete 만들때 id 값을 꼭 pydantic 모델로 정의 해야하나?
+       그냥 하면 되긴 한느데 문제가 있는건지.

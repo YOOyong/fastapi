@@ -40,3 +40,6 @@ def update_question(db: Session,
     db.commit()
 
 
+def delete_question(db: Session, db_question: Question):
+    db.delete(db_question)
+    db.commit()
