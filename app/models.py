@@ -12,6 +12,7 @@ class Question(Base):
     create_date = Column(DateTime, nullable=False)
     user_id = Column(Integer, ForeignKey("user.id"), nullable=True)
     user = relationship("User", backref="question_users")
+    modify_date = Column(DateTime, nullable=True)
 
 
 class Answer(Base):
@@ -26,6 +27,7 @@ class Answer(Base):
     question = relationship("Question", backref="answers")  # backref 로 역참조가 가능하게 설정.
     user_id = Column(Integer, ForeignKey("user.id"), nullable = True)
     user = relationship("User", backref="answer_users")
+    modify_date = Column(DateTime, nullable=True)
 
 
 class User(Base):

@@ -21,10 +21,22 @@ def get_question(db: Session, question_id: int):
 
 def create_question(db: Session,
                     question_create: question_schema.QuestionCreate,
-                    user:User):
+                    user: User):
     db_question = Question(subject=question_create.subject,
                            content=question_create.content,
                            create_date=datetime.now(),
                            user=user)
     db.add(db_question)
     db.commit()
+
+
+def update_question(db: Session,
+                    db_question: Question,
+                    question_update: question_schema.QuestionUpdate):
+    db_question.subject = question_update.subject
+    db_question.content = question_update.content
+    db_question.modify_date = datetime.now()
+    db.add(db_question)
+    db.commit()
+
+
