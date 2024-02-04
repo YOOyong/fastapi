@@ -17,4 +17,14 @@ class Answer(BaseModel):
     id: int
     content: str
     create_date: datetime.datetime
+    modify_date: datetime.datetime | None
     user: User | None
+    question_id: int
+
+
+class AnswerUpdate(AnswerCreate):
+    answer_id: int
+
+# #answer 에서는 pydantic을 사용하지 않고 그냥 해보자
+# class AnswerDelete(BaseModel):
+#     Answer_id: int

@@ -12,6 +12,7 @@ class Question(BaseModel):
     subject: str
     content: str
     create_date: datetime.datetime
+    modify_date: datetime.datetime | None
     user: User | None
     answers: list[Answer] = []  # 모델에서 backref 를 설정했기에 가져오기 가능
 

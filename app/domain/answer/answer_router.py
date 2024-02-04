@@ -25,3 +25,37 @@ def answer_create(question_id: int,
     answer_crud.create_answer(db, question=question,
                               answer_create=_answer_create,
                               user=current_user)
+
+
+@router.get("/detail/{answer_id}", response_model=answer_schema.Answer)
+def answer_detail(answer_id: int, db: Session = Depends(get_db)):
+    answer = answer_crud.get_answer(db, answer_id)
+    if not answer:
+        raise HTTPException(status_code=404, detail='없는 답변입니다.')
+    return answer
+
+
+@router.put("/update/{answer_id}", status_code=status.HTTP_204_NO_CONTENT)
+def answer_update(_answer_update: answer_schema.AnswerUpdate,
+                  db: Session = Depends(get_db),
+                  current_user: User = Depends(get_current_user)):
+    db_answer = answer_crud.get_answer(db, _answer_update.answer_id)
+
+    if not db_answer:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Answer not found")
+
+    if not current_user or current_user.id != db_answer.user_id:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="수정 권한이 없습니다.")
+
+    answer_crud.update_answer(db, db_answer, _answer_update)
+
+@router.delete("/delete/{answer_id}", status_code=status.HTTP_204_NO_CONTENT)
+def answer_delete(answer_id:int, db: Session = Depends(get_db),
+                  current_user:User = Depends(get_current_user)):
+    db_answer = answer_crud.get_answer(db, answer_id)
+    if not db_answer:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Answer not found")
+    if not current_user or current_user.id != db_answer.user_id:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail= '삭제권한이 없습니다.')
+
+    answer_crud.delete_answer(db, db_answer)

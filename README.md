@@ -24,4 +24,4 @@ uvicorn main:app --reload
 
 ### 궁금증
 - [ ] delete 만들때 id 값을 꼭 pydantic 모델로 정의 해야하나?
-       그냥 하면 되긴 한느데 문제가 있는건지.
+  -  answer와 question 두 방식을 다르게 만들었으니 api 호출해서 비교해보자.
