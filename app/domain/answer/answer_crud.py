@@ -28,3 +28,7 @@ def get_answer(db: Session, answer_id: int):
 def delete_answer(db: Session, db_answer: Answer):
     db.delete(db_answer)
     db.commit()
+
+def vote_answer(db:Session, db_answer:Answer, user: User):
+    db_answer.voter.append(user)
+    db.commit()

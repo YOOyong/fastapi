@@ -14,6 +14,7 @@ class Question(BaseModel):
     create_date: datetime.datetime
     modify_date: datetime.datetime | None
     user: User | None
+    voter: list[User] = []
     answers: list[Answer] = []  # 모델에서 backref 를 설정했기에 가져오기 가능
 
 
@@ -36,4 +37,8 @@ class QuestionUpdate(QuestionCreate):
     question_id : int
 
 class QuestionDelete(BaseModel):
+    question_id: int
+
+
+class QuestionVote(BaseModel):
     question_id: int

@@ -42,6 +42,7 @@ def question_update(_question_update: question_schema.QuestionUpdate,
                     current_user: User = Depends(get_current_user)):
     question_crud.update_question(db=db, db_question=db_question, question_update=_question_update)
 
+
 @router.delete("/delete", status_code=status.HTTP_204_NO_CONTENT)
 def question_delete(_question_delete: question_schema.QuestionDelete,
                     db: Session = Depends(get_db),
@@ -54,3 +55,15 @@ def question_delete(_question_delete: question_schema.QuestionDelete,
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
                             detail="삭제 권한이 없습니다.")
     question_crud.delete_question(db=db, db_question=db_question)
+
+
+@router.post('/vote', status_code=status.HTTP_204_NO_CONTENT)
+def question_vote(_question_vote: question_schema.QuestionVote,
+                  db: Session = Depends(get_db),
+                  current_user: User = Depends(get_current_user)):
+    db_question = question_crud.get_question(db, question_id=_question_vote.question_id)
+    if not db_question:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail ='없는 질문입니다.')
+
+
+    question_crud.vote_question(db=db, db_question=db_question, user= current_user)

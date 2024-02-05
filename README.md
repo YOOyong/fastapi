@@ -23,5 +23,8 @@ uvicorn main:app --reload
 - 버전문제. 패키지 재설치
 
 ### 궁금증
-- [ ] delete 만들때 id 값을 꼭 pydantic 모델로 정의 해야하나?
-  -  answer와 question 두 방식을 다르게 만들었으니 api 호출해서 비교해보자.
+- [x] delete 만들때 id 값을 꼭 pydantic 모델로 정의 해야하나?
+  - pydantic 모델을 쓰지 않으면 path varaible 이거나 query string으로 인식됨
+  - pydantic 모델을 쓰면 request body 형식임. 
+  - id 값과 같은 단일 int 같은건 그냥 쓰는것도 괜찮을 것 같다. ex) get detail
+  - 복잡한 유효성 검사가 필요한 경우에는 pydantic 모델을 쓰는것이 낫긴 하다.

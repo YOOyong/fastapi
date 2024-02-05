@@ -1,6 +1,13 @@
-from sqlalchemy import Column, Integer, String, Text, DateTime, ForeignKey
+from sqlalchemy import Column, Integer, String, Text, DateTime, ForeignKey, Table
 from sqlalchemy.orm import relationship
 from database import Base
+
+question_voter = Table(
+    'question_voter', Base.metadata,
+    Column('user_id', Integer, ForeignKey('user.id'), primary_key=True),
+    Column('question_id', Integer, ForeignKey('question.id'), primary_key=True)
+
+)
 
 
 class Question(Base):
@@ -12,7 +19,16 @@ class Question(Base):
     create_date = Column(DateTime, nullable=False)
     user_id = Column(Integer, ForeignKey("user.id"), nullable=True)
     user = relationship("User", backref="question_users")
+    # secondary를 정해줌으로써 voter 가 추가되면 question_voter 로 데이터가 들어간다.
+    voter = relationship('User', secondary=question_voter, backref='question_voters')
     modify_date = Column(DateTime, nullable=True)
+
+
+answer_voter = Table(
+    'answer_voter', Base.metadata,
+    Column('user_id', Integer, ForeignKey('user.id'), primary_key=True),
+    Column('answer_id', Integer, ForeignKey('answer.id'), primary_key=True)
+)
 
 
 class Answer(Base):
@@ -25,7 +41,8 @@ class Answer(Base):
     # answer 에서 question 모델을 참조하기 위해 넣은 변수.
     # answer.question.subject 식으로 접근 가능하게 해준다.
     question = relationship("Question", backref="answers")  # backref 로 역참조가 가능하게 설정.
-    user_id = Column(Integer, ForeignKey("user.id"), nullable = True)
+    voter = relationship('User', secondary=answer_voter, backref='answer_voters')
+    user_id = Column(Integer, ForeignKey("user.id"), nullable=True)
     user = relationship("User", backref="answer_users")
     modify_date = Column(DateTime, nullable=True)
 

@@ -49,13 +49,24 @@ def answer_update(_answer_update: answer_schema.AnswerUpdate,
 
     answer_crud.update_answer(db, db_answer, _answer_update)
 
-@router.delete("/delete/{answer_id}", status_code=status.HTTP_204_NO_CONTENT)
-def answer_delete(answer_id:int, db: Session = Depends(get_db),
-                  current_user:User = Depends(get_current_user)):
-    db_answer = answer_crud.get_answer(db, answer_id)
+
+@router.delete("/delete", status_code=status.HTTP_204_NO_CONTENT)
+def answer_delete(_answer_delete: answer_schema.AnswerDelete, db: Session = Depends(get_db),
+                  current_user: User = Depends(get_current_user)):
+    db_answer = answer_crud.get_answer(db, _answer_delete.answer_id)
     if not db_answer:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Answer not found")
     if not current_user or current_user.id != db_answer.user_id:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail= '삭제권한이 없습니다.')
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail='삭제권한이 없습니다.')
 
     answer_crud.delete_answer(db, db_answer)
+
+
+@router.post("/vote", status_code=status.HTTP_204_NO_CONTENT)
+def answer_voter(_answer_vote: answer_schema.AnswerVote, db: Session = Depends(get_db),
+                 current_user: User = Depends(get_current_user)):
+    db_answer = answer_crud.get_answer(db, _answer_vote.answer_id)
+    if not db_answer:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST)
+
+    answer_crud.vote_answer(db, db_answer, user=current_user)
