@@ -13,10 +13,10 @@ router = APIRouter(
 
 
 @router.get("/list", response_model=question_schema.QuestionList)
-def question_list(db: Session = Depends(get_db), page: int = 0, size: int = 10):
+def question_list(db: Session = Depends(get_db), page: int = 0, size: int = 10, keyword:str = ''):
     # depends 는 매개변수로 받은 함수의 실행 결과를 리턴. 이를 엔드포인트에 매개변수로 전달하여 주입
 
-    total, _questions_list = question_crud.get_question_list(db, skip=page * size, limit=size)
+    total, _questions_list = question_crud.get_question_list(db, skip=page * size, limit=size,keyword=keyword)
     return {
         'total': total,
         'question_list': _questions_list
