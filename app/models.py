@@ -54,3 +54,29 @@ class User(Base):
     username = Column(String, unique=True, nullable=False)
     password = Column(String, nullable=False)
     email = Column(String, unique=True, nullable=False)
+
+
+# question, answer 모두에 댓글을 달 수 있어야 한다.
+# 따로 만드는게 낫겠다.
+class QuestionComment(Base):
+    __tablename__ = "question_comment"
+
+    id = Column(Integer, primary_key=True)
+    content = Column(Text, nullable=False)
+    user_id = Column(Integer, ForeignKey("user.id"), nullable=True)
+    user = relationship("User", backref="question_comment_users")
+    question_id = Column(Integer, ForeignKey("question.id"))
+    question = relationship("Question", backref="comments")
+    create_date = Column(DateTime, nullable=False)
+
+
+class AnswerComment(Base):
+    __tablename__ = "answer_comment"
+
+    id = Column(Integer, primary_key=True)
+    content = Column(Text, nullable=False)
+    user_id = Column(Integer, ForeignKey("user.id"), nullable=True)
+    user = relationship("User", backref="answer_comment_users")
+    answer_id = Column(Integer, ForeignKey("answer.id"))
+    answer = relationship('Answer', backref='comments')
+    create_date = Column(DateTime, nullable=False)
