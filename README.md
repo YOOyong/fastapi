@@ -28,3 +28,7 @@ uvicorn main:app --reload
   - pydantic 모델을 쓰면 request body 형식임. 
   - id 값과 같은 단일 int 같은건 그냥 쓰는것도 괜찮을 것 같다. ex) get detail
   - 복잡한 유효성 검사가 필요한 경우에는 pydantic 모델을 쓰는것이 낫긴 하다.
+
+
+- [ ] sqlalchemy에서 n+1 문제 확인하기
+  - sqlalchemy model에서 lazy = select 일 때,  pydantic 스키마에 정의되어있지 않으면 추가적인 쿼리를 실행하지 않는지
