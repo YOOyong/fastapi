@@ -1,4 +1,4 @@
-from models import Question, User, Answer
+from models import Question, User, Answer, QuestionComment
 from domain.question import question_schema
 from sqlalchemy.orm import Session
 from sqlalchemy import and_
@@ -64,4 +64,30 @@ def delete_question(db: Session, db_question: Question):
 
 def vote_question(db: Session, db_question: Question, user: User):
     db_question.voter.append(user)
+    db.commit()
+
+
+def create_question_comment(db: Session, question_comment: question_schema.QuestionCommentCreate,
+                            question_id: int,
+                            user: User):
+    db_question_comment = QuestionComment(
+        content=question_comment.content,
+        question_id=question_id,
+        create_date=datetime.now(),
+        user=user
+    )
+    db.add(db_question_comment)
+    db.commit()
+
+
+def get_question_comment(db:Session, question_comment_id: int):
+    return db.query(QuestionComment).get(question_comment_id)
+
+
+def get_question_comment_list(db: Session, question_id: int):
+    return db.query(QuestionComment).filter(QuestionComment.question_id == question_id).all()
+
+
+def delete_question_comment(db:Session, question_comment: QuestionComment):
+    db.delete(question_comment)
     db.commit()
