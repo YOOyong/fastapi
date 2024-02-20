@@ -6,6 +6,7 @@ fastapi tutorial
   - 작성순서를 외워가며 만들어보자
 - [ ] https://github.com/tiangolo/full-stack-fastapi-postgresql 를 참고하여 리팩토링 해보기.
 - [ ] frontend 부분은 vue.js 로 작성해보기
+- [ ] Dependency injector 를 사용해 리팩토링 해보기.
 
 # memo
 
@@ -32,3 +33,4 @@ uvicorn main:app --reload
 
 - [ ] sqlalchemy에서 n+1 문제 확인하기
   - sqlalchemy model에서 lazy = select 일 때,  pydantic 스키마에 정의되어있지 않으면 추가적인 쿼리를 실행하지 않는지
+  - 유저 프로파일 테이블을 생성하고, 게시글을 가져올때 어떻게 되는지 확인해보자.
