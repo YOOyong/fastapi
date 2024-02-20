@@ -72,7 +72,7 @@ def answer_voter(_answer_vote: answer_schema.AnswerVote, db: Session = Depends(g
     answer_crud.vote_answer(db, db_answer, user=current_user)
 
 
-@router.post('/answer/comment/{answer_id}', status_code=status.HTTP_202_ACCEPTED)
+@router.post('/comment/{answer_id}', status_code=status.HTTP_202_ACCEPTED)
 def answer_comment_create(answer_id: int,
                           _answer_comment_create: answer_schema.AnswerCommentCreate,
                           db: Session = Depends(get_db),
@@ -80,6 +80,18 @@ def answer_comment_create(answer_id: int,
     answer_crud.create_answer_comment(db, _answer_comment_create, answer_id, current_user)
 
 
-@router.get('/answer/comment/{answer_id}', response_model=answer_schema.AnswerCommentList)
+@router.get('/comment/{answer_id}', response_model=answer_schema.AnswerCommentList)
 def answer_comment_list(answer_id: int, db: Session = Depends(get_db)):
     return {'comments': answer_crud.get_answer_comment_list(db, answer_id)}
+
+
+@router.delete('/comment/{answer_comment_id}', status_code=status.HTTP_204_NO_CONTENT)
+def answer_comment_delete(answer_comment_id: int,
+                          db: Session = Depends(get_db),
+                          current_user: User = Depends(get_current_user)):
+    db_answer_comment = answer_crud.get_answer_comment(db, answer_comment_id)
+    if not db_answer_comment:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Comment not found")
+    if not current_user or current_user.id != db_answer_comment.user_id:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail='삭제권한이 없습니다.')
+    answer_crud.delete_answer_comment(db, db_answer_comment)

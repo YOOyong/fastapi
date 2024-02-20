@@ -51,5 +51,14 @@ def create_answer_comment(db: Session,
     db.commit()
 
 
+def delete_answer_comment(db: Session, answer_comment: AnswerComment):
+    db.delete(answer_comment)
+    db.commit()
+
+
+def get_answer_comment(db: Session, answer_comment_id: int):
+    return db.query(AnswerComment).get(answer_comment_id)
+
+
 def get_answer_comment_list(db: Session, answer_id: int):
     return db.query(AnswerComment).filter(AnswerComment.answer_id == answer_id).all()
