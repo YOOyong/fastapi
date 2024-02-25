@@ -18,9 +18,20 @@ class Question(BaseModel):
     answers: list[Answer] = []  # 모델에서 backref 를 설정했기에 가져오기 가능
 
 
+class QuestionListElement(BaseModel):
+    """
+    pydantic model로 쿼리 제한하기 확인.
+    이 모델에 없는 answer, voter등의 정보에 대해서는 실제 쿼리가 발생하지 않는다.
+    """
+    id: int
+    subject: str
+    create_date: datetime.datetime
+    user: User | None
+
+
 class QuestionList(BaseModel):
     total: int = 0
-    question_list: list[Question] = []
+    question_list: list[QuestionListElement] = []
 
 
 class QuestionCreate(BaseModel):
@@ -33,8 +44,10 @@ class QuestionCreate(BaseModel):
             raise ValueError('빈 값은 허용되지 않습니다.')
         return v
 
+
 class QuestionUpdate(QuestionCreate):
-    question_id : int
+    question_id: int
+
 
 class QuestionDelete(BaseModel):
     question_id: int
@@ -51,8 +64,9 @@ class QuestionComment(BaseModel):
     user: User | None
     question_id: int
 
+
 class QuestionCommentCreate(BaseModel):
-    content : str
+    content: str
 
     @field_validator('content')
     def not_empty(cls, v):
@@ -63,4 +77,3 @@ class QuestionCommentCreate(BaseModel):
 
 class QuestionCommentList(BaseModel):
     comments: list[QuestionComment] = []
-

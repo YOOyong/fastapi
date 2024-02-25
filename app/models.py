@@ -55,6 +55,14 @@ class User(Base):
     password = Column(String, nullable=False)
     email = Column(String, unique=True, nullable=False)
 
+class Profile(Base):
+    __tablename__ = "profile"
+
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey("user.id"), unique=True, nullable=False)
+    user = relationship("User", backref="profile")
+    content = Column(Text, nullable=True)
+
 
 # question, answer 모두에 댓글을 달 수 있어야 한다.
 # 따로 만드는게 낫겠다.

@@ -3,10 +3,9 @@ fastapi tutorial
 
 # todo
 - [ ] https://wikidocs.net/175950 따라가기
-  - 작성순서를 외워가며 만들어보자
 - [ ] https://github.com/tiangolo/full-stack-fastapi-postgresql 를 참고하여 리팩토링 해보기.
 - [ ] frontend 부분은 vue.js 로 작성해보기
-- [ ] Dependency injector 를 사용해 리팩토링 해보기.
+- [ ] Dependency injector 를 사용해 보일러플레이트 참고해 적용, 비교
 
 # memo
 
@@ -14,7 +13,16 @@ fastapi tutorial
 ```console
 - fastapi 시작
 uvicorn main:app --reload
+
+- db sqlalchemy model 동기화
+-리비전 파일 생성 (테이블 생성, 변경하는 실행문)
+  alembic revision --autogenerate 
+-리비전 파일 실행
+  alembic upgrade head
 ```
+
+
+
 `main`  : 파일명 _main.py_  
 `app` : _main.py_ 안에서 만들어진 FastAPI object 명 `app = FastAPI()`
 
@@ -30,7 +38,9 @@ uvicorn main:app --reload
   - id 값과 같은 단일 int 같은건 그냥 쓰는것도 괜찮을 것 같다. ex) get detail
   - 복잡한 유효성 검사가 필요한 경우에는 pydantic 모델을 쓰는것이 낫긴 하다.
 
+- [x] sqlalchemy에서 n+1 문제 확인하기.
 
-- [ ] sqlalchemy에서 n+1 문제 확인하기
-  - sqlalchemy model에서 lazy = select 일 때,  pydantic 스키마에 정의되어있지 않으면 추가적인 쿼리를 실행하지 않는지
-  - 유저 프로파일 테이블을 생성하고, 게시글을 가져올때 어떻게 되는지 확인해보자.
+
+- [] 1 : 1 관계에서 pydantic 모델 작성, 매핑. 
+  - answer, user 관계에서 answer 스키마에서 user 스키마를 쓰는건 가능
+  - profile, user 관계에서 user 스키마에서 profile 스키마 자동 매핑을 불가능. 왜 이런지 찾아보기.
