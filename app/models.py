@@ -54,13 +54,12 @@ class User(Base):
     username = Column(String, unique=True, nullable=False)
     password = Column(String, nullable=False)
     email = Column(String, unique=True, nullable=False)
-
+    profile = relationship("Profile", uselist=False, backref="user")
 class Profile(Base):
     __tablename__ = "profile"
 
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey("user.id"), unique=True, nullable=False)
-    user = relationship("User", backref="profile")
     content = Column(Text, nullable=True)
 
 

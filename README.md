@@ -41,6 +41,18 @@ uvicorn main:app --reload
 - [x] sqlalchemy에서 n+1 문제 확인하기.
 
 
-- [] 1 : 1 관계에서 pydantic 모델 작성, 매핑. 
+- [x] 1 : 1 관계에서 pydantic 모델 작성, 매핑. 
   - answer, user 관계에서 answer 스키마에서 user 스키마를 쓰는건 가능
   - profile, user 관계에서 user 스키마에서 profile 스키마 자동 매핑을 불가능. 왜 이런지 찾아보기.
+  - 1 : 1 관계를 설정하는 방법이 잘못되었음. 아래와 같은 형식으로 수정. `uselist=False` 꼭 필요
+```python
+class Parent(Base):
+    __tablename__ = 'parent'
+    id = Column(Integer, primary_key=True)
+    child = relationship("Child", uselist=False, backref="parent")
+
+class Child(Base):
+    __tablename__ = 'child'
+    id = Column(Integer, primary_key=True)
+    parent_id = Column(Integer, ForeignKey('parent.id'))
+```

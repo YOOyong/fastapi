@@ -4,18 +4,17 @@ from pydantic_core.core_schema import FieldValidationInfo
 from typing import Optional
 
 
+class UserProfile(BaseModel):
+    content: str
+
+
 class User(BaseModel):
     id: int
     username: str
     email: EmailStr
 
-
 class UserList(BaseModel):
     user_list: list[User] = []
-
-
-class UserProfile(BaseModel):
-    content: str
 
 
 class UserDetail(User):

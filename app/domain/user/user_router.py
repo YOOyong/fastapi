@@ -105,7 +105,7 @@ def user_detail(username: str,
     db_user = user_crud.get_user(db, username)
     if not db_user:
         raise HTTPException(status_code=404, detail='없는 유저입니다.')
-    db_user_profile = user_crud.get_user_profile(db, db_user.id)
 
-    return user_schema.UserDetail(id=db_user.id, email=db_user.email, username=db_user.username,
-                                  profile=user_schema.UserProfile(content=db_user_profile.content))
+    return db_user
+
+
