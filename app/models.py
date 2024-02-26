@@ -22,7 +22,7 @@ class Question(Base):
     # secondary를 정해줌으로써 voter 가 추가되면 question_voter 로 데이터가 들어간다.
     voter = relationship('User', secondary=question_voter, backref='question_voters')
     modify_date = Column(DateTime, nullable=True)
-
+    view_count = Column(Integer, nullable=True)
 
 answer_voter = Table(
     'answer_voter', Base.metadata,

@@ -45,6 +45,7 @@ uvicorn main:app --reload
   - answer, user 관계에서 answer 스키마에서 user 스키마를 쓰는건 가능
   - profile, user 관계에서 user 스키마에서 profile 스키마 자동 매핑을 불가능. 왜 이런지 찾아보기.
   - 1 : 1 관계를 설정하는 방법이 잘못되었음. 아래와 같은 형식으로 수정. `uselist=False` 꼭 필요
+  - sqlalchemy 한번 제대로 봐야겠다.
 ```python
 class Parent(Base):
     __tablename__ = 'parent'

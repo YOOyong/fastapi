@@ -14,6 +14,7 @@ class Question(BaseModel):
     create_date: datetime.datetime
     modify_date: datetime.datetime | None
     user: User | None
+    view_count: int | None
     voter: list[User] = []
     answers: list[Answer] = []  # 모델에서 backref 를 설정했기에 가져오기 가능
 
@@ -27,6 +28,7 @@ class QuestionListElement(BaseModel):
     subject: str
     create_date: datetime.datetime
     user: User | None
+    view_count: int | None
 
 
 class QuestionList(BaseModel):

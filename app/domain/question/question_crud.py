@@ -33,6 +33,11 @@ def get_question_list(db: Session, skip: int = 0, limit: int = 10, keyword: str 
 
 def get_question(db: Session, question_id: int):
     question = db.query(Question).get(question_id)
+    if question.view_count:
+        question.view_count += 1
+    else:
+        question.view_count = 1  #view_count 추가 전 등록했던 글을 위한 분기. 테스트용
+    db.commit()
     return question
 
 
@@ -42,6 +47,7 @@ def create_question(db: Session,
     db_question = Question(subject=question_create.subject,
                            content=question_create.content,
                            create_date=datetime.now(),
+                           view_count=0,
                            user=user)
     db.add(db_question)
     db.commit()
